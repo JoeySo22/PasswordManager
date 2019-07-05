@@ -178,16 +178,34 @@ public class PasswordGenerator {
         }
 
         //NOW TO RANDOMLY PULL FROM THE STACKS AND POPULATE THE STRINGBUILDER
-        List<Stack> stacks = new LinkedList<Stack>();
-        stacks.add(digitCharStack);
-        stacks.add(lowerCaseCharStack);
-        stacks.add(upperCaseCharStack);
-        stacks.add(symbolCharStack);
-        stacks.add(remainderCharStack);
+        List<Stack> stacksList = new LinkedList<Stack>();
+        if (!digitCharStack.empty()) {
+            stacksList.add(digitCharStack);
+        }
+        if (!lowerCaseCharStack.empty()) {
+            stacksList.add(lowerCaseCharStack);
+        }
+        if (!upperCaseCharStack.empty()) {
+            stacksList.add(upperCaseCharStack);
+        }
+        if (!symbolCharStack.empty()){
+            stacksList.add(symbolCharStack);
+        }
+        if (!remainderCharStack.empty()){
+            stacksList.add(remainderCharStack);
+        }
 
         for (byte i = 0; i <= this.minimumLength; i++){
-            while (!stacks.isEmpty()){
-                
+            while (!stacksList.isEmpty()){
+                int upperSizeBound = stacksList.size()+1;
+                int index = r.nextInt(upperSizeBound);
+                Stack<Character> ourStack = stacksList.get(index);
+                if (ourStack.empty()){
+                    stacksList.remove(index);
+                }
+                else {
+                    passwordBuilder.append(ourStack.pop());
+                }
             }
         }
         
