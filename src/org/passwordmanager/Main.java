@@ -3,6 +3,12 @@ package org.passwordmanager;
 public class Main {
 
     public static void main(String[] args) {
+
+        PasswordGenerator passwordGenerator = new PasswordGenerator.Builder((byte)7, (byte)12, "").build();
+
+        String pass = passwordGenerator.getPassword();
+
+        System.out.println(pass);
         //run the virtual keyboard
         //VirtualKeyboard virtualKeyboard = generateVirtualKeyboard();
         //virtualKeyboard.run();

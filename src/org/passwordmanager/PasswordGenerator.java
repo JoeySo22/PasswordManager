@@ -28,7 +28,7 @@ public class PasswordGenerator {
 
     private StringBuilder passwordBuilder;
 
-    public class PasswordGeneratorBuilder{
+    public static class Builder {
         // Required parameters
         public final byte minimumLength;
         public final byte maximumLength;
@@ -40,7 +40,7 @@ public class PasswordGenerator {
         public byte minimumSymbolsRequired = 0;
         public byte minimumDigitsRequired = 0;
 
-        public PasswordGeneratorBuilder(byte minLength, byte maxLength, String invalidChars){
+        public Builder(byte minLength, byte maxLength, String invalidChars){
             if (minLength <= 6){
                 throw new IllegalArgumentException("Minimum length must be greater than 6");
             }
@@ -52,28 +52,28 @@ public class PasswordGenerator {
             this.invalidCharacters = invalidChars;
         }
 
-        public PasswordGeneratorBuilder minimumCaps(byte minCaps){
+        public Builder minimumCaps(byte minCaps){
             if (isLessThanZero(minCaps)){
                 throw new IllegalArgumentException("Minimum Caps cannot be less than zero");
             }
             minimumCapsRequired = minCaps;
             return this;
         }
-        public PasswordGeneratorBuilder minimumLower(byte minLower){
+        public Builder minimumLower(byte minLower){
             if (isLessThanZero(minLower)){
                 throw new IllegalArgumentException("Minimum lower cannot be less that zero");
             }
             minimumLowerRequired = minLower;
             return this;
         }
-        public PasswordGeneratorBuilder minimumSymbols(byte minSymbols){
+        public Builder minimumSymbols(byte minSymbols){
             if (isLessThanZero(minSymbols)){
                 throw new IllegalArgumentException("Minimum Symbols cannot be less than zero");
             }
             minimumSymbolsRequired = minSymbols;
             return this;
         }
-        public PasswordGeneratorBuilder minimumDigits(byte minDigits){
+        public Builder minimumDigits(byte minDigits){
             if (isLessThanZero(minDigits)){
                 throw new IllegalArgumentException("Minimum Digits cannot be less than zero");
             }
@@ -90,7 +90,7 @@ public class PasswordGenerator {
         private boolean isLessThanZero(byte n) {return n < 0;}
     }
 
-    private PasswordGenerator(PasswordGeneratorBuilder our_builder){
+    public PasswordGenerator(Builder our_builder){
         this.minimumLength = our_builder.minimumLength;
         this.maximumLength = our_builder.maximumLength;
         this.invalidCharacters = our_builder.invalidCharacters;
@@ -198,7 +198,7 @@ public class PasswordGenerator {
         for (byte i = 0; i <= this.minimumLength; i++){
             while (!stacksList.isEmpty()){
                 int upperSizeBound = stacksList.size()+1;
-                int index = r.nextInt(upperSizeBound);
+                int index = r.nextInt(upperSizeBound - 1);
                 Stack<Character> ourStack = stacksList.get(index);
                 if (ourStack.empty()){
                     stacksList.remove(index);
