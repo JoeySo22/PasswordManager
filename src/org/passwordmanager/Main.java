@@ -1,5 +1,7 @@
 package org.passwordmanager;
 
+import java.util.Random;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -9,6 +11,7 @@ public class Main {
         String pass = passwordGenerator.getPassword();
 
         System.out.println(pass);
+
         //run the virtual keyboard
         //VirtualKeyboard virtualKeyboard = generateVirtualKeyboard();
         //virtualKeyboard.run();

@@ -26,6 +26,8 @@ public class PasswordGenerator {
     private final byte minimumSymbolsRequired;
     private final byte minimumDigitsRequired;
 
+    Random r = new Random();
+
     private StringBuilder passwordBuilder;
 
     public static class Builder {
@@ -41,7 +43,7 @@ public class PasswordGenerator {
         public byte minimumDigitsRequired = 0;
 
         public Builder(byte minLength, byte maxLength, String invalidChars){
-            if (minLength <= 6){
+            if (minLength < 6){
                 throw new IllegalArgumentException("Minimum length must be greater than 6");
             }
             if (maxLength < minLength){
@@ -103,6 +105,7 @@ public class PasswordGenerator {
     }
 
     private void buildPassword(){
+
         passwordBuilder = new StringBuilder(minimumLength);
 
         Stack<Character> digitCharStack = new Stack<Character>();
@@ -111,8 +114,6 @@ public class PasswordGenerator {
         Stack<Character> symbolCharStack = new Stack<Character>();
         Stack<Character> remainderCharStack = new Stack<Character>();
 
-        Random r = new Random();
-        byte wordLength = minimumLength;
         byte minimumRequiredChars = (byte)(this.minimumCapsRequired + this.minimumSymbolsRequired +
                 this.minimumDigitsRequired);
 
@@ -165,7 +166,8 @@ public class PasswordGenerator {
         }
 
         //Stack-maker for remaining characters (just like above)
-        for (byte i = 1; i <= wordLength - minimumRequiredChars; i++){
+        // Not completely random. outputs the same length everytime.
+        for (byte i = 1; i <= ((maximumLength - minimumRequiredChars) - randomByte(maximumLength, minimumRequiredChars)); i++){
             while (true){
                 char[] firstArray = CHAR_ARRAY_ARRAY[r.nextInt(CHAR_ARRAY_ARRAY
                 .length)];
@@ -208,10 +210,10 @@ public class PasswordGenerator {
                 }
             }
         }
-        
+    }
 
-
-
+    private byte randomByte(byte upper, byte lower){
+        return (byte)((((int)(r.nextDouble() * 10)) % (upper - lower)) + (lower));
     }
 
     public String getPassword(){
