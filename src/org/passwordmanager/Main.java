@@ -1,39 +1,21 @@
 package org.passwordmanager;
 
-import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class Main {
 
     public static void main(String[] args) {
-
-        PasswordGenerator passwordGenerator = new PasswordGenerator.Builder((byte)7, (byte)12, "").build();
-
-        String pass = passwordGenerator.getPassword();
-
-        System.out.println(pass);
-
-        //run the virtual keyboard
-        //VirtualKeyboard virtualKeyboard = generateVirtualKeyboard();
-        //virtualKeyboard.run();
-        //Key key = virtualKeyboard.getKey();
-
-        /*
-            Need to create a method and a block that runs the clients input from the virtual keyboard and run the
-            SHA-512 and compare the results. If they match then they may access the passwords and generator.
-
-            SHA-512 runs better on x64 computers.
-            https://security.stackexchange.com/questions/165559/why-would-i-choose-sha-256-over-sha-512-for-a-ssl-tls-ce
-            rtificate
-
-         */
-        //if (virtualKeyboard.isPasswordCorrect())
-        //{
-
-        //}
-
+        PasswordGenerator.Builder builder = new PasswordGenerator.Builder((byte) 6, (byte) 12, "");
+        PasswordGenerator generator = builder.build();
+        int counter = 0;
+        while (counter < 25){
+            try {
+                System.out.println(generator.generatePassword());
+                TimeUnit.SECONDS.sleep(3);
+            } catch (InterruptedException e){
+                System.out.println("Did not sleep");
+            }
+            counter++;
+        }
     }
-    /*
-    private VirtualKeyboard generateVirtualKeyboard(){
-        return VirtualKeyboard.generateKeyboard();
-    }*/
 }

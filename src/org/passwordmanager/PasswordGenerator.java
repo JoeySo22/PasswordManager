@@ -119,51 +119,19 @@ public class PasswordGenerator {
 
         //CONTINUE HERE
         // I can create another array of char's so that we can eliminate some of the ones we want to eliminate. Or
-        // Just create a filter when randomly getting these out. 
+        // Just create a filter when randomly getting these out.
         
         //Stack-maker for digit characters
-        for (byte i = 1; i <= minimumDigitsRequired; i++){
-            while (true) {
-                char digitChar = DIGIT_CHARS_ARRAY[r.nextInt(DIGIT_CHARS_ARRAY.length)];
-                if (!isCharInString(digitChar, this.invalidCharacters)){
-                    digitCharStack.push(digitChar);
-                    break;
-                }
-            }
-        }
+        processStack(minimumDigitsRequired, DIGIT_CHARS_ARRAY, digitCharStack);
 
         //Stack-maker for upper-case characters(just like above)
-        for (byte i = 1; i <= minimumCapsRequired; i++) {
-            while (true){
-                char upperCaseChar = UPPER_CASE_CHARS_ARRAY[r.nextInt(UPPER_CASE_CHARS_ARRAY.length)];
-                if (!isCharInString(upperCaseChar, this.invalidCharacters)){
-                    upperCaseCharStack.push(upperCaseChar);
-                    break;
-                }
-            }
-        }
+        processStack(minimumCapsRequired, UPPER_CASE_CHARS_ARRAY, upperCaseCharStack);
 
         //Stack-maker for lower-case characters(just like above)
-        for (byte i = 1; i <= minimumLowerRequired; i++){
-            while (true){
-                char lowerCaseChar = LOWER_CASE_CHARS_ARRAY[r.nextInt(LOWER_CASE_CHARS_ARRAY.length)];
-                if (!isCharInString(lowerCaseChar, this.invalidCharacters)){
-                    lowerCaseCharStack.push(lowerCaseChar);
-                    break;
-                }
-            }
-        }
+        processStack(minimumCapsRequired, LOWER_CASE_CHARS_ARRAY, lowerCaseCharStack);
 
         //Stack-maker for symbol-case characters(just like above)
-        for (byte i = 1; i <= minimumSymbolsRequired; i++){
-            while (true){
-                char symbolChar = SYMBOLS_CHAR_ARRAY[r.nextInt(SYMBOLS_CHAR_ARRAY.length)];
-                if (!isCharInString(symbolChar, this.invalidCharacters)){
-                    symbolCharStack.push(symbolChar);
-                    break;
-                }
-            }
-        }
+        processStack(minimumSymbolsRequired, SYMBOLS_CHAR_ARRAY, symbolCharStack);
 
         //Stack-maker for remaining characters (just like above)
         // Not completely random. outputs the same length everytime.
@@ -212,11 +180,24 @@ public class PasswordGenerator {
         }
     }
 
+    private void processStack(byte minimumCharsRequired, char[] charArray, Stack<Character> charStack) {
+        for (byte i = 1; i <= minimumCharsRequired; i++){
+            while (true){
+                char character = charArray[r.nextInt(charArray.length)];
+                if (!isCharInString(character, invalidCharacters)){
+                    charStack.push(character);
+                    break;
+                }
+            }
+        }
+    }
+
     private byte randomByte(byte upper, byte lower){
         return (byte)((((int)(r.nextDouble() * 10)) % (upper - lower)) + (lower));
     }
 
-    public String getPassword(){
+    public String generatePassword(){
+        buildPassword();
         return this.passwordBuilder.toString();
     }
 
