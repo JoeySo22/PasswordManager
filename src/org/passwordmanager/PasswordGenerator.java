@@ -55,7 +55,7 @@ public class PasswordGenerator {
     private boolean refreshed = false;
 
     Random r = new Random();
-    
+
     public static class PasswordGeneratorBuilder {
         // Required parameters
         private final int minimumLength;
@@ -128,6 +128,10 @@ public class PasswordGenerator {
         public void forceWord(String word) {
             this.forcedWord = word;
         }
+
+        public void setStrategy(PasswordStrategy strategy) {
+
+        }
     }
 
     public PasswordGenerator(PasswordGeneratorBuilder ourPGBuilder){
@@ -142,6 +146,11 @@ public class PasswordGenerator {
     }
 
     private void buildPassword(){
+        /*
+            I'm thinking in this part of the code we have possibilities of change. This is the place of the actual
+            algorithm. I need to find a Design Pattern that varies about how the algorithm functions.
+            1.) Strategy Pattern
+         */
         passwordBuilder = new StringBuilder(maximumLength);
         Stack<Character> digitCharStack = new Stack<>();
         Stack<Character> lowerCaseCharStack = new Stack<>();

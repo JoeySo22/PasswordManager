@@ -5,13 +5,19 @@ import java.util.concurrent.TimeUnit;
 public class Main {
 
     public static void main(String[] args) {
-        PasswordGenerator.Builder builder = new PasswordGenerator.Builder((byte) 6, (byte) 12, "");
+        PasswordGenerator.PasswordGeneratorBuilder builder = new PasswordGenerator.PasswordGeneratorBuilder(
+                6, 12, "");
+        builder.setStrategy();
+        builder.setMinimums(1,1,1,0);
+        builder.forceWord("esther");
         PasswordGenerator generator = builder.build();
-        int counter = 0;
-        while (counter < 25){
+        int counter = 1;
+        int iterations = 12;
+        while (counter <= iterations){
             try {
-                System.out.println(generator.generatePassword());
                 TimeUnit.SECONDS.sleep(3);
+                String generatedPassword = generator.generatePassword();
+                System.out.println(counter + "\t" + generatedPassword.length() + "\t" + generatedPassword);
             } catch (InterruptedException e){
                 System.out.println("Did not sleep");
             }
