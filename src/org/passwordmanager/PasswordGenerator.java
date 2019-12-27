@@ -53,6 +53,7 @@ public class PasswordGenerator {
     private final String invalidCharacters;
     private StringBuilder passwordBuilder;
     private boolean refreshed = false;
+    private PasswordStrategy strategy;
 
     Random r = new Random();
 
@@ -145,89 +146,10 @@ public class PasswordGenerator {
         buildPassword();
     }
 
-    private void buildPassword(){
-        /*
-            I'm thinking in this part of the code we have possibilities of change. This is the place of the actual
-            algorithm. I need to find a Design Pattern that varies about how the algorithm functions.
-            1.) Strategy Pattern
-         */
-        passwordBuilder = new StringBuilder(maximumLength);
-        Stack<Character> digitCharStack = new Stack<>();
-        Stack<Character> lowerCaseCharStack = new Stack<>();
-        Stack<Character> upperCaseCharStack = new Stack<>();
-        Stack<Character> symbolCharStack = new Stack<>();
-        Stack<Character> remainderCharStack = new Stack<>();
-        int numberOfRemainingCharacters = generateRemainingCharacterNumber();
-        //Stack-maker for digit characters
-        processStack(minimumDigitsRequired, DIGIT_CHARS_ARRAY, digitCharStack);
-        //Stack-maker for upper-case characters(just like above)
-        processStack(minimumCapsRequired, UPPER_CASE_CHARS_ARRAY, upperCaseCharStack);
-        //Stack-maker for lower-case characters(just like above)
-        processStack(minimumCapsRequired, LOWER_CASE_CHARS_ARRAY, lowerCaseCharStack);
-        //Stack-maker for symbol-case characters(just like above)
-        processStack(minimumSymbolsRequired, SYMBOLS_CHAR_ARRAY, symbolCharStack);
-        //Stack-maker for remaining characters (just like above)
-        // Not completely random. outputs the same length everytime.
-        for (int i = 1; i <= numberOfRemainingCharacters; i++){
-            while (true){
-                char[] firstArray = CHAR_ARRAY_ARRAY[r.nextInt(CHAR_ARRAY_ARRAY.length)];
-                char remainingChar = firstArray[r.nextInt(firstArray.length)];
-                if (!isCharInString(remainingChar, this.invalidCharacters)){
-                    remainderCharStack.push(remainingChar);
-                    break;
-                }
-            }
-        }
-        //NOW TO RANDOMLY PULL FROM THE STACKS AND POPULATE THE STRINGBUILDER
-        List<Stack> stacksList = new LinkedList<>();
-        if (!digitCharStack.empty()) stacksList.add(digitCharStack);
-        if (!lowerCaseCharStack.empty()) stacksList.add(lowerCaseCharStack);
-        if (!upperCaseCharStack.empty()) stacksList.add(upperCaseCharStack);
-        if (!symbolCharStack.empty()) stacksList.add(symbolCharStack);
-        if (!remainderCharStack.empty()) stacksList.add(remainderCharStack);
-        for (int i = 0; i <= this.minimumLength; i++){
-            while (!stacksList.isEmpty()){
-                int upperSizeBound = stacksList.size()+1;
-                int index = r.nextInt(upperSizeBound - 1);
-                Stack<Character> ourStack = stacksList.get(index);
-                if (ourStack.empty()) stacksList.remove(index);
-                else passwordBuilder.append(ourStack.pop());
-            }
-        }
-    }
-
-    private int generateRemainingCharacterNumber() {
-        int requiredCharacterCount = minimumCapsRequired + minimumDigitsRequired + minimumSymbolsRequired;
-        if (requiredCharacterCount >= minimumLength) return randomInteger(minimumLength - requiredCharacterCount,
-                maximumLength - minimumLength);
-        else return randomInteger(maximumLength - requiredCharacterCount,
-                minimumLength - requiredCharacterCount - 1);
-    }
-
-    private void processStack(int minimumCharsRequired, char[] charArray, Stack<Character> charStack) {
-        for (int i = 1; i <= minimumCharsRequired; i++){
-            while (true){
-                char character = charArray[r.nextInt(charArray.length)];
-                if (!isCharInString(character, invalidCharacters)){
-                    charStack.push(character);
-                    break;
-                }
-            }
-        }
-    }
-
-    private int randomInteger(int upper, int lower){
-        return ((((int)(r.nextDouble() * 10)) % (upper - lower)) + (lower));
-    }
 
     public String generatePassword(){
-        if (refreshed) buildPassword();
-        refreshed = true;
-        return this.passwordBuilder.toString();
+        strategy.makePassword();
     }
 
-    public boolean isCharInString(char c, String s){
-        for (int i = 0; i < s.length(); i++) if (c == s.charAt(i)) return true;
-        return false;
-    }
+
 }
