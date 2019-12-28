@@ -1,11 +1,13 @@
 package org.passwordmanager;
 
+import java.util.Random;
 import java.util.Stack;
 
 public class Utilities {
 
     static void processStack(int minimumCharsRequired, char[] charArray, Stack<Character> charStack,
                                      String invalidCharacters) {
+        Random r = new Random();
         for (int i = 1; i <= minimumCharsRequired; i++){
             while (true){
                 char character = charArray[r.nextInt(charArray.length)];
@@ -26,6 +28,7 @@ public class Utilities {
     }
 
     static int randomInteger(int upper, int lower){
+        Random r = new Random();
         return ((((int)(r.nextDouble() * 10)) % (upper - lower)) + (lower));
     }
 

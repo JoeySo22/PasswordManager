@@ -23,7 +23,7 @@ public abstract class PasswordStrategy {
     public PasswordStrategy(){
         instanceGenerator = null;
         minimumLength = 8;
-        maximumLength = 64;
+        maximumLength = 12;
         password = new StringBuilder(maximumLength);
         invalidCharacters = "";
         minimumLowerChars = 1;

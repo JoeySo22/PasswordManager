@@ -2,6 +2,7 @@ package org.passwordmanager;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.Stack;
 
 import static org.passwordmanager.CharacterCollection.*;
@@ -15,6 +16,7 @@ public class DefaultPasswordStrategy extends PasswordStrategy {
 
     @Override
     public String makePassword() {
+        Random r = new Random();
         password = new StringBuilder(maximumLength);
         Stack<Character> digitCharStack = new Stack<>();
         Stack<Character> lowerCaseCharStack = new Stack<>();

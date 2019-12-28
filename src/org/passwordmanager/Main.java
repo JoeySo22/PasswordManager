@@ -7,9 +7,9 @@ public class Main {
     public static void main(String[] args) {
         PasswordGenerator.PasswordGeneratorBuilder builder = new PasswordGenerator.PasswordGeneratorBuilder(
                 6, 12, "");
-        builder.setStrategy();
+        builder.setStrategy(new DefaultPasswordStrategy());
         builder.setMinimums(1,1,1,0);
-        builder.forceWord("esther");
+        //builder.forceWord("esther");
         PasswordGenerator generator = builder.build();
         int counter = 1;
         int iterations = 12;

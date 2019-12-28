@@ -69,6 +69,7 @@ public class PasswordGenerator {
         private int minimumSymbolsRequired = 0;
         private int minimumDigitsRequired = 0;
         private String forcedWord;
+        private PasswordStrategy strategy;
 
         public PasswordGeneratorBuilder(int minLength, int maxLength, String invalidChars){
             if (minLength < 6){
@@ -131,7 +132,7 @@ public class PasswordGenerator {
         }
 
         public void setStrategy(PasswordStrategy strategy) {
-
+            this.strategy = strategy;
         }
     }
 
@@ -143,12 +144,12 @@ public class PasswordGenerator {
         this.minimumLowerRequired = ourPGBuilder.minimumLowerRequired;
         this.minimumSymbolsRequired = ourPGBuilder.minimumSymbolsRequired;
         this.minimumDigitsRequired = ourPGBuilder.minimumDigitsRequired;
-        buildPassword();
+        this.strategy = ourPGBuilder.strategy;
     }
 
 
     public String generatePassword(){
-        strategy.makePassword();
+        return strategy.makePassword();
     }
 
 
